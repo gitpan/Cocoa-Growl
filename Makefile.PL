@@ -20,8 +20,13 @@ requires 'URI';
 test_requires 'Test::More' => '0.88';
 author_tests('xt');
 
+auto_set_repository;
+
 use_ppport '3.19';
 cc_append_to_libs '-lobjc';
+
+# i don't know why but without this occuered compilation error on OSX system perl
+cc_append_to_ccflags '-D__QUICKDRAWAPI__';
 
 my $use_local_framework;
 if ($use_local_framework = (grep(/USE_LOCAL_GROWL_FRAMEWORK=.*/, @ARGV))[0] ) {
