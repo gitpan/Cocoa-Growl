@@ -24,10 +24,11 @@ no_index:
     - t
     - xt
 requires:
+  File::ShareDir: 0
   URI: 0
   XSLoader: 0.1
   parent: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/typester/cocoa-growl-perl.git
-version: 0.03
+version: 0.04
