@@ -6,7 +6,7 @@ use parent 'Exporter';
 use XSLoader;
 use URI;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 our @EXPORT_OK   = qw(growl_installed growl_running growl_register growl_notify);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -92,6 +92,7 @@ Cocoa::Growl - Yet another growl module using Growl.framework
     );
 
 =head1 DESCRIPTION
+
 
 =head1 FUNCTIONS
 
@@ -215,11 +216,11 @@ Simplest way to do that is use this module with L<Cocoa::EventLoop>.
         name        => 'test notification',
         title       => 'Hello',
         description => 'Growl World!',
-        onClick => sub {
+        on_click => sub {
             warn 'click';
             $wait = 0;
         },
-        onTimeout => sub {
+        on_timeout => sub {
             warn 'timeout';
             $want = 0;
         },
@@ -227,40 +228,9 @@ Simplest way to do that is use this module with L<Cocoa::EventLoop>.
     
     Cocoa::EventLoop->run_while(0.1) while unless $wait;
 
-If you want to write more complicated script, use L<AnyEvent> and L<AnyEvent::Impl::NSRunLoop>.
-L<AnyEvent::Impl::NSRunLoop> is a wrapper for L<AnyEvent> and L<Cocoa::EventLoop> and by using this module, you can use cocoa's event loop transparently in your AnyEvent application.
-
-This is little example:
-
-    use AnyEvent;
-    use AnyEvent::Impl::NSRunLoop;
-    
-    use Cocoa::Growl ':all';;
-    
-    my $cv = AnyEvent->condvar;
-    
-    growl_register(
-        name          => 'test script',
-        notifications => ['test notification'],
-    );
-    
-    growl_notify(
-        name        => 'test notification',
-        title       => 'Hello',
-        description => 'Growl World!',
-        onClick => sub {
-            warn 'click';
-            $cv->send;
-        },
-        onTimeout => sub {
-            warn 'timeout';
-            $cv->send;
-        },
-    );
-    
-    $cv->recv;
-
-This script show one notification and wait until notification closed.
+If you want to write more complicated script, use L<AnyEvent>.
+AnyEvent 5.3 or higher is support L<Cocoa::EventLoop> internally, so you can use cocoa's event loop transparently in your AnyEvent application.
+See L<AnyEvent::Impl::Cocoa> for more detail.
 
 =head1 USE YOUR OWN Growl.framework
 
